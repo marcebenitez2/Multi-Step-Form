@@ -668,7 +668,17 @@ input:checked + .slider:before {
     font-weight: 600;
   }
 
-
+  .total-resume{
+    display: flex;
+    margin-top: 2rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .total-price-resume{
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--Purplishblue);
+  }
 }
 
 .activado{

@@ -389,10 +389,21 @@
     </div>
   `;
     }
+    let total = 0;
 
+    for (let i = 4; i < personalInfo.length; i++) {
+      if (!isNaN(personalInfo[i])) {
+        total += parseInt(personalInfo[i]);
+      }
+    }
     newcontent4 += `
     </div>
+    <div class="total-resume">
+      <h1>TOTAL:</h1>
+      <p class="total-price-resume">$${total}</p>
+    </div>
   </div>
+
 `;
 
     // Ahora newcontent4 contiene todo el HTML dinámico creado, incluyendo los campos restantes del array personalInfo.
