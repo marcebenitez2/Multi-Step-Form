@@ -20,7 +20,7 @@
   font-family: "Ubuntu", sans-serif;
 }
 
-.circle.active {
+.circle.active,.circle-responsive.active {
   background-color: var(--Lightblue);
   color: var(--Marineblue);
 }
@@ -471,7 +471,7 @@ input:checked + .slider:before {
     right: -20rem;
     top: 5rem;
     border: none;
-    background-color: var(--Purplishblue);
+    background-color: red;
     border-radius: 10px;
     color: white;
     font-weight: 900;
@@ -630,6 +630,45 @@ input:checked + .slider:before {
     font-weight: 600;
     cursor: pointer;
   }
+
+/* Section 4 */
+
+  .resume-container{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+  }  
+  .plan-resume{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .adds-resume{
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+  }
+
+  .add-info-resume{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .resume{
+    font-size: 19px;
+    font-weight: 300;
+  }
+
+  .resume-price{
+    color: var(--Purplishblue);
+    font-weight: 600;
+  }
+
+
 }
 
 .activado{

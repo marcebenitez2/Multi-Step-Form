@@ -1,7 +1,8 @@
 (function () {
   const inputsContainer = document.querySelector(".inputs-container");
   const circles = document.querySelectorAll(".circle");
-  const personalInfo = [ ]
+  const personalInfo = [];
+  const circleresponsive = document.querySelectorAll(".circle-responsive");
 
   circles.forEach((circle, index) => {
     circle.addEventListener("click", () => {
@@ -56,19 +57,20 @@
       for (let i = 0; i < inputs.length; i++) {
         if (!inputs[i].checkValidity()) {
           next1.disabled = true;
+          next1.style.backgroundColor = "red";
           return;
         }
       }
       next1.disabled = false;
+      next1.style.backgroundColor = "blue";
     }
 
     inpname.addEventListener("input", checkFormValidity);
     inpmail.addEventListener("input", checkFormValidity);
     inptel.addEventListener("input", checkFormValidity);
 
-
     next1.addEventListener("click", () => {
-     personalInfo.push(inpname.value,inpmail.value,inptel.value);
+      personalInfo.push(inpname.value, inpmail.value, inptel.value);
       selectPlan(personalInfo);
     });
 
@@ -77,6 +79,12 @@
     });
 
     circles[0].classList.add("active");
+
+    circleresponsive.forEach((circle) => {
+      circle.classList.remove("active");
+    });
+
+    circleresponsive[0].classList.add("active");
   }
 
   function selectPlan(personalInfo) {
@@ -85,21 +93,21 @@
       <h1>Select your plan</h1>
       <p class="subtitle">You have the option of monthly or yearly billing.</p>
       <div class="boxes2">
-        <div class="box" data-num="9">
+        <div class="box" data-num="9" data-plan="Arcade(Monthly)">
           <img src="./assets/images/icon-arcade.svg" alt="">
           <div class="data-price" > 
             <p class="plan">Arcade</p>
             <p class="price">$9/mo</p>
           </div>
         </div>
-        <div class="box value2" data-num="12">
+        <div class="box value2" data-num="12" data-plan="Advanced(Monthly)">
           <img src="./assets/images/icon-advanced.svg" alt="">
           <div class= "data-price"> 
             <p class="plan">Advanced</p>
             <p class="price">$12/mo</p>
           </div>
         </div>
-        <div class="box value3" data-num="15">
+        <div class="box value3" data-num="15"data-plan="Pro(Monthly)" >
           <img src="./assets/images/icon-pro.svg" alt="">
           <div class="data-price">
             <p class="plan">Pro</p>
@@ -130,7 +138,7 @@
       yourInfo(personalInfo);
     });
     next2.addEventListener("click", () => {
-      addOns(personalInfo);
+      addOns(personalInfo, checkbox);
     });
     boxes.forEach(function (box) {
       box.addEventListener("click", function (e) {
@@ -139,7 +147,8 @@
           boxes.forEach(function (b) {
             if (b.classList.contains("activado")) {
               b.classList.remove("activado");
-              personalInfo.pop()
+              personalInfo.pop();
+              personalInfo.pop();
             }
           });
 
@@ -147,16 +156,17 @@
           const price = parseInt(box.dataset.num);
           priceTotal = price;
           console.log(priceTotal);
+          const datasetplan = box.dataset.plan;
+          personalInfo.push(datasetplan);
           personalInfo.push(priceTotal);
+          console.log(personalInfo);
         } else {
           box.classList.remove("activado");
-          personalInfo.pop()
-          
+          personalInfo.pop();
+          personalInfo.pop();
         }
       });
     });
-    
-    
 
     checkbox.addEventListener("click", () => {
       if (checkbox.checked) {
@@ -183,7 +193,11 @@
         boxes.forEach((box) => {
           const datanumactual = parseInt(box.dataset.num);
           box.dataset.num = datanumactual * 10;
-          console.log(box.dataset.num);
+          const currentPlan = box.dataset.plan;
+          if (!currentPlan.includes("Yearly")) {
+            const newPlan = currentPlan.replace("(Monthly)", "(Yearly)");
+            box.dataset.plan = newPlan;
+          }
         });
       } else {
         const prices = document.querySelectorAll("p.price");
@@ -208,6 +222,11 @@
           const datanumactual = parseInt(box.dataset.num);
           box.dataset.num = datanumactual / 10;
           console.log(box.dataset.num);
+          const currentPlan = box.dataset.plan;
+          if (!currentPlan.includes("Monthly")) {
+            const newPlan = currentPlan.replace("(Yearly)", "(Monthly)");
+            box.dataset.plan = newPlan;
+          }
         });
       }
     });
@@ -217,16 +236,22 @@
     });
 
     circles[1].classList.add("active");
+
+    circleresponsive.forEach((circle) => {
+      circle.classList.remove("active");
+    });
+
+    circleresponsive[1].classList.add("active");
   }
 
-  function addOns(personalInfo) {
+  function addOns(personalInfo, checkbox) {
     let newcontent3 = `
       <h1> Pick add-ons </h1>
       <p class="subtitle"> Add-ons help to enhance your gaming experience.</p>
       <div class="boxes3">
           <div class="box3">
               <div class="check-info">
-                  <input type="checkbox" class="checkbox">
+                  <input type="checkbox" class="checkbox checkbox1" data-num="1" data-add="Online service">
                   <div class="plan-info">
                       <p class="plan">Online service</p>
                       <p class="subtitle">Acces to multiplayer games</p>
@@ -235,9 +260,9 @@
               <p class="price-ads">+$1/mo</p>
           </div>
   
-          <div class="box3">
+          <div class="box3" >
               <div class="check-info">
-                  <input type="checkbox" class="checkbox">
+                  <input type="checkbox" class="checkbox checkbox2" data-num="2" data-add="Larger storage">
                   <div class="plan-info">
                       <p class="plan">Larger storage</p>
                       <p class="subtitle">Extra 1TB cloud save</p>
@@ -248,7 +273,7 @@
   
           <div class="box3">
               <div class="check-info">
-                  <input type="checkbox" class="checkbox">
+                  <input type="checkbox" class="checkbox checkbox3" data-num="1" data-add="Customizable profile">
                   <div class="plan-info">
                       <p class="plan">Customizable profile</p>
                       <p class="subtitle">Custom theme on your profile</p>
@@ -266,43 +291,111 @@
     inputsContainer.innerHTML = newcontent3;
     const next3 = document.querySelector(".next3");
     const prev3 = document.querySelector(".prev3");
-    next3.addEventListener("click", finishinup);
-    prev3.addEventListener("click", selectPlan);
+    next3.addEventListener("click", () => {
+      finishinup(personalInfo);
+    });
+    prev3.addEventListener("click", () => {
+      selectPlan(personalInfo);
+    });
 
-    console.log(personalInfo);
+    const checkboxes = document.querySelectorAll(".checkbox");
+
+    if (checkbox.checked) {
+      const prices = document.querySelectorAll("p.price-ads");
+      prices.forEach((price) => {
+        const currentPrice = Number(
+          price.textContent.replace(/[^0-9.-]+/g, "")
+        );
+        const newPrice = "$" + currentPrice * 10 + "/yr";
+        price.textContent = newPrice;
+      });
+      checkboxes.forEach((box) => {
+        let datanumactual = parseInt(box.dataset.num);
+        datanumactual = datanumactual * 10;
+        box.dataset.num = datanumactual;
+      });
+    }
+
+    const checkbox1 = document.querySelector(".checkbox1");
+    const checkbox2 = document.querySelector(".checkbox2");
+    const checkbox3 = document.querySelector(".checkbox3");
+
+    checkbox1.addEventListener("input", () => {
+      if (checkbox1.checked) {
+        const ads = parseInt(checkbox1.dataset.num);
+        const dataadd = checkbox1.dataset.add;
+        personalInfo.push(dataadd);
+        personalInfo.push(ads);
+      } else {
+        personalInfo.pop();
+        personalInfo.pop();
+      }
+    });
+    checkbox2.addEventListener("input", () => {
+      if (checkbox2.checked) {
+        const ads = parseInt(checkbox2.dataset.num);
+        const dataadd = checkbox2.dataset.add;
+        personalInfo.push(dataadd);
+        personalInfo.push(ads);
+      } else {
+        personalInfo.pop();
+        personalInfo.pop();
+      }
+    });
+    checkbox3.addEventListener("input", () => {
+      if (checkbox3.checked) {
+        const ads = parseInt(checkbox3.dataset.num);
+        const dataadd = checkbox3.dataset.add;
+        personalInfo.push(dataadd);
+        personalInfo.push(ads);
+      } else {
+        personalInfo.pop();
+        personalInfo.pop();
+      }
+    });
 
     circles.forEach((circle) => {
       circle.classList.remove("active");
     });
 
     circles[2].classList.add("active");
+
+    circleresponsive.forEach((circle) => {
+      circle.classList.remove("active");
+    });
+
+    circleresponsive[2].classList.add("active");
   }
 
-  function finishinup() {
+  function finishinup(personalInfo) {
+    console.log(personalInfo);
     let newcontent4 = `
-      <h1> Finishing up </h1>
-      <p class="subtitle"> Double-check everything looks OK before confirming.</p>
-      <div class="resume-container">
-        <div class="ticket-container">
-            <div class= "plan-container">
-                <div class="info-plan">
-                    <p class="plan-ticket">Arcade(Monthly)</p>
-                    <p class="subtitle-title">Change</p>
-                </div>
-                <p class="">$9/mo</p>      
-            </div
-            <div class="add-container">
-              
-             </div>
-  
-             <div>
-              <p>Total:</p>
-              <p class="total-price">$12/mo</p>
-          </div>
-      </div>
-      </div>
-      
-      `;
+  <h1>Finishing up</h1>
+  <p class="subtitle">${personalInfo[0]}, double-check everything looks OK before confirming.</p>
+  <div class="resume-container">
+    <div class="plan-resume">
+      <h1 class="resume">${personalInfo[3]}</h1>
+      <p class="resume-price">$${personalInfo[4]}</p>
+    </div>
+    <div class="adds-resume">
+`;
+
+    // Agregar el contenido dinámico en el div "adds-resume"
+    for (let i = 5; i < personalInfo.length; i += 2) {
+      newcontent4 += `
+    <div class="add-info-resume">
+      <h1 class="resume">${personalInfo[i]}</h1>
+      <p class="resume-price">$${personalInfo[i + 1]}</p>
+    </div>
+  `;
+    }
+
+    newcontent4 += `
+    </div>
+  </div>
+`;
+
+    // Ahora newcontent4 contiene todo el HTML dinámico creado, incluyendo los campos restantes del array personalInfo.
 
     inputsContainer.innerHTML = newcontent4;
     circles.forEach((circle) => {
@@ -310,5 +403,11 @@
     });
 
     circles[3].classList.add("active");
+
+    circleresponsive.forEach((circle) => {
+      circle.classList.remove("active");
+    });
+
+    circleresponsive[3].classList.add("active");
   }
 })();
