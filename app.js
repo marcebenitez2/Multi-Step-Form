@@ -501,6 +501,7 @@
 
     const back4 = document.querySelector(".back4");
     back4.addEventListener("click", () => {
+      resetAdds(user)
       addOns(user, checkbox);
     });
   }
@@ -525,4 +526,10 @@
 
     inputsContainer.innerHTML = newcontent5;
   }
+
+
+  function resetAdds() {
+    user.addsprice = [];
+  }
+  
 })();
