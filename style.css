@@ -720,6 +720,27 @@ input:checked + .slider:before {
     font-family: "Ubuntu", sans-serif;
     letter-spacing: 2px;
   }
+
+
+  .last-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .finish-container{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .finish-container img{
+    width: 5rem;
+  }
 }
 
 .activado{

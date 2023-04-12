@@ -434,17 +434,22 @@
 
     const next4 = document.querySelector(".next4")
     next4.addEventListener("click",()=>{
-      
+      tanks()
     })
   }
 
   function tanks(){
     let newcontent5 = `
-    <div class="finish-container">
-      <img src="./assets/images/icon-thank-you.svg" alt="">
-      <h1>Thank you!</h1>
-      <p>Thanks for confirming your subscription! We hope you have fun using our platform. If you ever need support, please feel free to email us at support@loremgaming.com.</p>
-   </div>
+    <div class="last-container">
+      <div class="finish-container">
+        <img src="./assets/images/icon-thank-you.svg" alt="">
+        <h1>Thank you!</h1>
+        <p class="subtitle2">Thanks for confirming your subscription! We hope you have fun using our platform. If you ever need support, please feel free to email us at support@loremgaming.com.</p>
+      </div>
+    </div>
+    
     `
+
+    inputsContainer.innerHTML=newcontent5
   }
 })();
