@@ -2,6 +2,7 @@
   const inputsContainer = document.querySelector(".inputs-container");
   const circles = document.querySelectorAll(".circle");
   const circleresponsive = document.querySelectorAll(".circle-responsive");
+  // Declaramos el objeto que almacenara toda la informacion del formulario
   let user = {
     name: "",
     mail: "",
@@ -11,27 +12,15 @@
     addsprice: [],
   };
 
-  circles.forEach((circle, index) => {
-    circle.addEventListener("click", () => {
-      if (index === 0) {
-        yourInfo(user);
-        circle.classList.add("active")
-      } else if (index === 1) {
-        selectPlan(user);
-        circle.classList.add("active")
-      } else if (index === 2) {
-        addOns(user);
-        circle.classList.add("active")
-      } else if (index === 3) {
-        finishinup(user);
-        circle.classList.add("active")
-      }
-    });
-  });
+  // Funcion que es ejecutada apenas temrina de cargar todos los elementos del DOM
 
   document.addEventListener("DOMContentLoaded", yourInfo);
 
+  // Paso 1
+
   function yourInfo() {
+    // Declaramos el valor que tendra inputs container inicialmente
+
     let newcontent1 = `
       <h1>Personal info</h1>
       <p class="subtitle">
@@ -58,10 +47,17 @@
 
     inputsContainer.innerHTML = newcontent1;
 
+    // Le damos valor a todos los elementos inputs
+
     const inpname = document.querySelector(".name");
     const inpmail = document.querySelector(".mail");
     const inptel = document.querySelector(".tel");
+
+    // Le damos valor al boton que llevara a la siguiente seccion
+
     const next1 = document.querySelector(".next1");
+
+    // Funcion de validacion
 
     function checkFormValidity() {
       const inputs = [inpname, inpmail, inptel];
@@ -76,9 +72,13 @@
       next1.style.backgroundColor = "blue";
     }
 
+    // Le añadimos un evento input a todos los campos que seleccionamos anteriormente y llamamos a la funcion de validacion cada vez que se inserta algo
+
     inpname.addEventListener("input", checkFormValidity);
     inpmail.addEventListener("input", checkFormValidity);
     inptel.addEventListener("input", checkFormValidity);
+
+    // Guardamos toda la informacion recogida en el objeto y pasamos a la siguiente seccion
 
     next1.addEventListener("click", () => {
       user.name = inpname.value;
@@ -86,6 +86,8 @@
       user.tel = inptel.value;
       selectPlan(user);
     });
+
+    // Funcion para activar el circulo en base a la seccion
 
     circles.forEach((circle) => {
       circle.classList.remove("active");
@@ -100,7 +102,11 @@
     circleresponsive[0].classList.add("active");
   }
 
+  // Paso 2
+
   function selectPlan(user) {
+    // Acordamos el valor totoal del plan que utilizara en 0 y le damos valor al nuevo contenido que aparecera en pantalla
+
     let priceTotal = 0;
     let newContent2 = `
       <h1>Select your plan</h1>
@@ -143,16 +149,25 @@
     `;
 
     inputsContainer.innerHTML = newContent2;
+
+    // Le damos valor a todos los elementos que aparecen en pantalla
+
     const prev2 = document.querySelector(".prev2");
     const next2 = document.querySelector(".next2");
     const boxes = document.querySelectorAll(".box");
     const checkbox = document.querySelector(".check-state");
+
+    // Añadimos el evento a los botones para poder direccionarte al paso 1 o 2 usando como parametro los datos ya registrados en el objeto
+
     prev2.addEventListener("click", () => {
       yourInfo(user);
     });
     next2.addEventListener("click", () => {
       addOns(user, checkbox);
     });
+
+    // Le damos un evento a cada caja de plan, le damos estilo al seleccionado y los guardamos en el objeto (Solo se puede seleccionar 1)
+
     boxes.forEach(function (box) {
       box.addEventListener("click", function (e) {
         priceTotal = 0;
@@ -175,6 +190,8 @@
       });
     });
 
+    // Le damos el evento al checkbox switch permitiendo cambiar los valores y los precios de los planes, desactivado (plan mensual), activado (plan anual)
+
     checkbox.addEventListener("click", () => {
       if (checkbox.checked) {
         const prices = document.querySelectorAll("p.price");
@@ -190,6 +207,9 @@
           // Asignamos el nuevo texto al elemento
           price.textContent = newPrice;
         });
+
+        // Cremos un nuevo parrafo en cada uno de los planes notando que se activo el plan anual
+
         const promos = document.querySelectorAll(".data-price");
         promos.forEach((promo) => {
           const nuevop = document.createElement("p");
@@ -197,6 +217,9 @@
           nuevop.classList.add("plan2");
           promo.appendChild(nuevop);
         });
+
+        // Cambiamos los valores que tiene la etiqueta en el html (no visibles para el usario)
+
         boxes.forEach((box) => {
           const datanumactual = parseInt(box.dataset.num);
           box.dataset.num = datanumactual * 10;
@@ -218,6 +241,9 @@
           // Asignamos el nuevo texto al elemento
           price.textContent = newPrice;
         });
+
+        // Eliminamos el nuevo p creado en caso de ser desactivado
+
         const promos = document.querySelectorAll(".data-price");
         promos.forEach((promo) => {
           const plan2Elements = promo.querySelectorAll(".plan2");
@@ -225,6 +251,9 @@
             promo.removeChild(plan2);
           });
         });
+
+        // Cambiamos los valores que tiene la etiqueta en el html (no visibles para el usario)
+
         boxes.forEach((box) => {
           const datanumactual = parseInt(box.dataset.num);
           box.dataset.num = datanumactual / 10;
@@ -236,6 +265,8 @@
         });
       }
     });
+
+    // Funcion para activar el circulo en base a la seccion
 
     circles.forEach((circle) => {
       circle.classList.remove("active");
@@ -250,7 +281,12 @@
     circleresponsive[1].classList.add("active");
   }
 
+  // Paso 3
+
   function addOns(user, checkbox) {
+
+    // Declaramos el nuevo valor que tendra la seccion 3 
+
     let newcontent3 = `
       <h1> Pick add-ons </h1>
       <p class="subtitle"> Add-ons help to enhance your gaming experience.</p>
@@ -295,16 +331,23 @@
       `;
 
     inputsContainer.innerHTML = newcontent3;
+
+    // Le damos valor a los botones y le asignamos la funcion para retroceder o avanzar en el formulario
+
     const next3 = document.querySelector(".next3");
     const prev3 = document.querySelector(".prev3");
     next3.addEventListener("click", () => {
-      finishinup(user);
+      finishinup(user, checkbox);
     });
     prev3.addEventListener("click", () => {
-      selectPlan(user);
+      selectPlan(user, checkbox);
     });
 
+    // Le damos valor a los chebox de seleccion de adds
+
     const checkboxes = document.querySelectorAll(".checkbox");
+
+    // En caso que venga de la activacion del plan anual, el precio de los adds son corregidos al precio anual. Tambien cambiamos el valor de de la etiqueta HTML (no visible)
 
     if (checkbox.checked) {
       const prices = document.querySelectorAll("p.price-ads");
@@ -322,9 +365,13 @@
       });
     }
 
+    // Le damos valor puntualmente a cada uno
+
     const checkbox1 = document.querySelector(".checkbox1");
     const checkbox2 = document.querySelector(".checkbox2");
     const checkbox3 = document.querySelector(".checkbox3");
+
+    // En caso de activar cada checkbox se guardara el nombre del add y el precio dentro de un array ubicado en el objeto 
 
     checkbox1.addEventListener("input", () => {
       if (checkbox1.checked) {
@@ -363,6 +410,8 @@
       }
     });
 
+    // Funcion de activacion de circulos 
+
     circles.forEach((circle) => {
       circle.classList.remove("active");
     });
@@ -376,7 +425,12 @@
     circleresponsive[2].classList.add("active");
   }
 
-  function finishinup(user) {
+  // Paso 4
+
+  function finishinup(user, checkbox) {
+
+    	// Declaramos el valor que tendra la pantalla en la seccion 4
+
     let newcontent4 = `
   <h1>Finishing up</h1>
   <p class="subtitle">${user.name}, double-check everything looks OK before confirming.</p>
@@ -397,6 +451,9 @@
     </div>
   `;
     }
+
+    // For que permite calcular el total a pagar sumando el plan con los adds seleccionados 
+
     let total = user.priceplan;
 
     for (let i = 0; i < user.addsprice.length; i++) {
@@ -410,16 +467,18 @@
       <h1>TOTAL:</h1>
       <p class="total-price-resume">$${total}</p>
     </div>
-    <div>
+    <div class=btn-container4>
+      <button class="back4">BACK</button>
       <button class="next4">CONFIRM</button>
     </div>
   </div>
 
 `;
 
-    // Ahora newcontent4 contiene todo el HTML dinámico creado, incluyendo los campos restantes del array personalInfo.
+    // Funcion de activacion de circulo 
 
     inputsContainer.innerHTML = newcontent4;
+
     circles.forEach((circle) => {
       circle.classList.remove("active");
     });
@@ -432,13 +491,27 @@
 
     circleresponsive[3].classList.add("active");
 
-    const next4 = document.querySelector(".next4")
-    next4.addEventListener("click",()=>{
-      tanks()
-    })
+
+    // Le damos valor a los botones para retroceder o avanzar en secciones 
+
+    const next4 = document.querySelector(".next4");
+    next4.addEventListener("click", () => {
+      tanks();
+    });
+
+    const back4 = document.querySelector(".back4");
+    back4.addEventListener("click", () => {
+      addOns(user, checkbox);
+    });
   }
 
-  function tanks(){
+
+  // Paso 5
+
+  function tanks() {
+
+    // Declaramos el contenido del final del formulario 
+
     let newcontent5 = `
     <div class="last-container">
       <div class="finish-container">
@@ -448,8 +521,8 @@
       </div>
     </div>
     
-    `
+    `;
 
-    inputsContainer.innerHTML=newcontent5
+    inputsContainer.innerHTML = newcontent5;
   }
 })();
