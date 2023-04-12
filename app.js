@@ -1,19 +1,30 @@
 (function () {
   const inputsContainer = document.querySelector(".inputs-container");
   const circles = document.querySelectorAll(".circle");
-  const personalInfo = [];
   const circleresponsive = document.querySelectorAll(".circle-responsive");
+  let user = {
+    name: "",
+    mail: "",
+    tel: "",
+    plan: "",
+    priceplan: "",
+    addsprice: [],
+  };
 
   circles.forEach((circle, index) => {
     circle.addEventListener("click", () => {
       if (index === 0) {
-        yourInfo();
+        yourInfo(user);
+        circle.classList.add("active")
       } else if (index === 1) {
-        selectPlan();
+        selectPlan(user);
+        circle.classList.add("active")
       } else if (index === 2) {
-        addOns();
+        addOns(user);
+        circle.classList.add("active")
       } else if (index === 3) {
-        finishinup();
+        finishinup(user);
+        circle.classList.add("active")
       }
     });
   });
@@ -70,8 +81,10 @@
     inptel.addEventListener("input", checkFormValidity);
 
     next1.addEventListener("click", () => {
-      personalInfo.push(inpname.value, inpmail.value, inptel.value);
-      selectPlan(personalInfo);
+      user.name = inpname.value;
+      user.mail = inpmail.value;
+      user.tel = inptel.value;
+      selectPlan(user);
     });
 
     circles.forEach((circle) => {
@@ -87,7 +100,7 @@
     circleresponsive[0].classList.add("active");
   }
 
-  function selectPlan(personalInfo) {
+  function selectPlan(user) {
     let priceTotal = 0;
     let newContent2 = `
       <h1>Select your plan</h1>
@@ -135,10 +148,10 @@
     const boxes = document.querySelectorAll(".box");
     const checkbox = document.querySelector(".check-state");
     prev2.addEventListener("click", () => {
-      yourInfo(personalInfo);
+      yourInfo(user);
     });
     next2.addEventListener("click", () => {
-      addOns(personalInfo, checkbox);
+      addOns(user, checkbox);
     });
     boxes.forEach(function (box) {
       box.addEventListener("click", function (e) {
@@ -147,23 +160,17 @@
           boxes.forEach(function (b) {
             if (b.classList.contains("activado")) {
               b.classList.remove("activado");
-              personalInfo.pop();
-              personalInfo.pop();
             }
           });
 
           box.classList.add("activado");
           const price = parseInt(box.dataset.num);
           priceTotal = price;
-          console.log(priceTotal);
           const datasetplan = box.dataset.plan;
-          personalInfo.push(datasetplan);
-          personalInfo.push(priceTotal);
-          console.log(personalInfo);
+          user.plan = datasetplan;
+          user.priceplan = priceTotal;
         } else {
           box.classList.remove("activado");
-          personalInfo.pop();
-          personalInfo.pop();
         }
       });
     });
@@ -221,7 +228,6 @@
         boxes.forEach((box) => {
           const datanumactual = parseInt(box.dataset.num);
           box.dataset.num = datanumactual / 10;
-          console.log(box.dataset.num);
           const currentPlan = box.dataset.plan;
           if (!currentPlan.includes("Monthly")) {
             const newPlan = currentPlan.replace("(Yearly)", "(Monthly)");
@@ -244,7 +250,7 @@
     circleresponsive[1].classList.add("active");
   }
 
-  function addOns(personalInfo, checkbox) {
+  function addOns(user, checkbox) {
     let newcontent3 = `
       <h1> Pick add-ons </h1>
       <p class="subtitle"> Add-ons help to enhance your gaming experience.</p>
@@ -254,7 +260,7 @@
                   <input type="checkbox" class="checkbox checkbox1" data-num="1" data-add="Online service">
                   <div class="plan-info">
                       <p class="plan">Online service</p>
-                      <p class="subtitle">Acces to multiplayer games</p>
+                      <p class="subtitle2">Acces to multiplayer games</p>
                   </div>
               </div>
               <p class="price-ads">+$1/mo</p>
@@ -265,7 +271,7 @@
                   <input type="checkbox" class="checkbox checkbox2" data-num="2" data-add="Larger storage">
                   <div class="plan-info">
                       <p class="plan">Larger storage</p>
-                      <p class="subtitle">Extra 1TB cloud save</p>
+                      <p class="subtitle2">Extra 1TB cloud save</p>
                   </div>
               </div>
               <p class="price-ads">+$2/mo</p>
@@ -276,7 +282,7 @@
                   <input type="checkbox" class="checkbox checkbox3" data-num="1" data-add="Customizable profile">
                   <div class="plan-info">
                       <p class="plan">Customizable profile</p>
-                      <p class="subtitle">Custom theme on your profile</p>
+                      <p class="subtitle2">Custom theme on your profile</p>
                   </div>
               </div>
               <p class="price-ads">+$1/mo</p>
@@ -292,10 +298,10 @@
     const next3 = document.querySelector(".next3");
     const prev3 = document.querySelector(".prev3");
     next3.addEventListener("click", () => {
-      finishinup(personalInfo);
+      finishinup(user);
     });
     prev3.addEventListener("click", () => {
-      selectPlan(personalInfo);
+      selectPlan(user);
     });
 
     const checkboxes = document.querySelectorAll(".checkbox");
@@ -324,33 +330,36 @@
       if (checkbox1.checked) {
         const ads = parseInt(checkbox1.dataset.num);
         const dataadd = checkbox1.dataset.add;
-        personalInfo.push(dataadd);
-        personalInfo.push(ads);
+
+        user.addsprice.push(dataadd);
+        user.addsprice.push(ads);
       } else {
-        personalInfo.pop();
-        personalInfo.pop();
+        user.addsprice.pop();
+        user.addsprice.pop();
       }
     });
     checkbox2.addEventListener("input", () => {
       if (checkbox2.checked) {
         const ads = parseInt(checkbox2.dataset.num);
         const dataadd = checkbox2.dataset.add;
-        personalInfo.push(dataadd);
-        personalInfo.push(ads);
+
+        user.addsprice.push(dataadd);
+        user.addsprice.push(ads);
       } else {
-        personalInfo.pop();
-        personalInfo.pop();
+        user.addsprice.pop();
+        user.addsprice.pop();
       }
     });
     checkbox3.addEventListener("input", () => {
       if (checkbox3.checked) {
         const ads = parseInt(checkbox3.dataset.num);
         const dataadd = checkbox3.dataset.add;
-        personalInfo.push(dataadd);
-        personalInfo.push(ads);
+
+        user.addsprice.push(dataadd);
+        user.addsprice.push(ads);
       } else {
-        personalInfo.pop();
-        personalInfo.pop();
+        user.addsprice.pop();
+        user.addsprice.pop();
       }
     });
 
@@ -367,33 +376,32 @@
     circleresponsive[2].classList.add("active");
   }
 
-  function finishinup(personalInfo) {
-    console.log(personalInfo);
+  function finishinup(user) {
     let newcontent4 = `
   <h1>Finishing up</h1>
-  <p class="subtitle">${personalInfo[0]}, double-check everything looks OK before confirming.</p>
+  <p class="subtitle">${user.name}, double-check everything looks OK before confirming.</p>
   <div class="resume-container">
     <div class="plan-resume">
-      <h1 class="resume">${personalInfo[3]}</h1>
-      <p class="resume-price">$${personalInfo[4]}</p>
+      <h1 class="resume">${user.plan}</h1>
+      <p class="resume-price">$${user.priceplan}</p>
     </div>
     <div class="adds-resume">
 `;
 
     // Agregar el contenido dinámico en el div "adds-resume"
-    for (let i = 5; i < personalInfo.length; i += 2) {
+    for (let i = 0; i < user.addsprice.length; i += 2) {
       newcontent4 += `
     <div class="add-info-resume">
-      <h1 class="resume">${personalInfo[i]}</h1>
-      <p class="resume-price">$${personalInfo[i + 1]}</p>
+      <h1 class="resume">${user.addsprice[i]}</h1>
+      <p class="resume-price">$${user.addsprice[i + 1]}</p>
     </div>
   `;
     }
-    let total = 0;
+    let total = user.priceplan;
 
-    for (let i = 4; i < personalInfo.length; i++) {
-      if (!isNaN(personalInfo[i])) {
-        total += parseInt(personalInfo[i]);
+    for (let i = 0; i < user.addsprice.length; i++) {
+      if (!isNaN(user.addsprice[i])) {
+        total += parseInt(user.addsprice[i]);
       }
     }
     newcontent4 += `
@@ -401,6 +409,9 @@
     <div class="total-resume">
       <h1>TOTAL:</h1>
       <p class="total-price-resume">$${total}</p>
+    </div>
+    <div>
+      <button class="next4">CONFIRM</button>
     </div>
   </div>
 
@@ -420,5 +431,20 @@
     });
 
     circleresponsive[3].classList.add("active");
+
+    const next4 = document.querySelector(".next4")
+    next4.addEventListener("click",()=>{
+      
+    })
+  }
+
+  function tanks(){
+    let newcontent5 = `
+    <div class="finish-container">
+      <img src="./assets/images/icon-thank-you.svg" alt="">
+      <h1>Thank you!</h1>
+      <p>Thanks for confirming your subscription! We hope you have fun using our platform. If you ever need support, please feel free to email us at support@loremgaming.com.</p>
+   </div>
+    `
   }
 })();
